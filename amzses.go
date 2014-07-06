@@ -14,7 +14,6 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/stathat/jconfig"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -22,12 +21,8 @@ import (
 	"time"
 )
 
-const (
-	endpoint = "https://email.us-east-1.amazonaws.com"
-)
-
 type SES struct {
-	accessKey, secretKey string
+	accessKey, secretKey, endpoint string
 }
 
 // for your convenience, a struct you can use with encoding/xml on the server's response
@@ -36,13 +31,9 @@ type AmazonResponse struct {
 	RequestId string `xml:"ResponseMetadata>RequestId"`
 }
 
-func Init() *SES {
-	config := jconfig.LoadConfig("/etc/aws.conf")
-	return &SES{config.GetString("aws_access_key"), config.GetString("aws_secret_key")}
-}
 
-func InitAuth(accessKey, secretKey string) *SES {
-	return &SES{accessKey, secretKey}
+func InitAuth(accessKey, secretKey string, endpoint string) *SES {
+	return &SES{accessKey, secretKey, endpoint}
 }
 
 func (ses *SES) sendMail(from, to, subject, body, format string) (string, error) {
@@ -74,7 +65,7 @@ func (ses *SES) authorizationHeader(date string) []string {
 }
 
 func (ses *SES) sesGet(data url.Values) (string, error) {
-	urlstr := fmt.Sprintf("%s?%s", endpoint, data.Encode())
+	urlstr := fmt.Sprintf("%s?%s", ses.endpoint, data.Encode())
 	endpointURL, _ := url.Parse(urlstr)
 	headers := map[string][]string{}
 
