@@ -13,7 +13,7 @@ Usage
 
 Then create and use an ses object:
 
-    ses := amzses.Init(username, secretkey, endpoint)
+    ses, err := amzses.Init(username, secretkey, endpoint)
     response, err := ses.SendMail("info@example.com", "user@gmail.com", "Welcome!", "Welcome to our project!\n\n...")
 
 The first return value is the response string from the server. To extract the message and request IDs:
