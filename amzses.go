@@ -37,7 +37,7 @@ type AmazonResponse struct {
 // accessKey and secretKey must be set, and it errors otherwise,
 // but endpoint is assumed to be "https://email.us-east-1.amazonaws.com" 
 // if it is not set.
-func Init(accessKey, secretKey, endpoint string) *SES, error {
+func Init(accessKey, secretKey, endpoint string) (*SES, error) {
 	if accessKey == "" || secretKey == "" {
 		return nil, errors.New("amzses.Init: accessKey and secretKey must be set to continue")
 	}
