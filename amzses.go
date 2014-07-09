@@ -44,7 +44,7 @@ func Init(accessKey, secretKey, endpoint string) (*SES, error) {
 	if endpoint == "" {
 		endpoint = "https://email.us-east-1.amazonaws.com"
 	}
-	return &SES{accessKey, secretKey, endpoint}
+	return &SES{accessKey, secretKey, endpoint}, nil
 }
 
 func (ses *SES) sendMail(from, to, subject, body, format string) (string, error) {
