@@ -1,4 +1,4 @@
-// Copyright 2011 Numrotron Inc.
+// Copyright 2011 Numrotron Inc., 2014 Alexander Harkness
 // Use of this source code is governed by an MIT-style license
 // that can be found in the LICENSE file.
 //
@@ -22,7 +22,9 @@ import (
 )
 
 type SES struct {
-	accessKey, secretKey, endpoint string
+	accessKey string
+	secretKey string
+	endpoint  string
 }
 
 // for your convenience, a struct you can use with encoding/xml on the server's response
@@ -31,8 +33,17 @@ type AmazonResponse struct {
 	RequestId string `xml:"ResponseMetadata>RequestId"`
 }
 
-
-func Init(accessKey, secretKey string, endpoint string) *SES {
+// Init creates a SES object that can be used to send email.
+// accessKey and secretKey must be set, and it errors otherwise,
+// but endpoint is assumed to be "https://email.us-east-1.amazonaws.com" 
+// if it is not set.
+func Init(accessKey, secretKey, endpoint string) *SES, error {
+	if accessKey == "" || secretKey == "" {
+		return nil, errors.New("amzses.Init: accessKey and secretKey must be set to continue")
+	}
+	if endpoint == "" {
+		endpoint = "https://email.us-east-1.amazonaws.com"
+	}
 	return &SES{accessKey, secretKey, endpoint}
 }
 
