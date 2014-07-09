@@ -32,7 +32,7 @@ type AmazonResponse struct {
 }
 
 
-func InitAuth(accessKey, secretKey string, endpoint string) *SES {
+func Init(accessKey, secretKey string, endpoint string) *SES {
 	return &SES{accessKey, secretKey, endpoint}
 }
 
