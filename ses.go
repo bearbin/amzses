@@ -5,8 +5,8 @@
 // Developed at www.stathat.com by Patrick Crosby
 // Contact us on twitter with any questions:  twitter.com/stat_hat
 
-// amzses is a Go package to send emails using Amazon's Simple Email Service.
-package amzses
+// ses is a Go package to send emails using Amazon's Simple Email Service.
+package ses
 
 import (
 	"crypto/hmac"
@@ -34,8 +34,8 @@ type AmazonResponse struct {
 }
 
 // Init creates a SES object that can be used to send email.
-// accessKey and secretKey must be set, and it errors otherwise,
-// but endpoint is assumed to be "https://email.us-east-1.amazonaws.com" 
+// accessKey and secretKey must be set, and it errors if they are not,
+// but endpoint is assumed to be "https://email.us-east-1.amazonaws.com"
 // if it is not set.
 func Init(accessKey, secretKey, endpoint string) (*SES, error) {
 	if accessKey == "" || secretKey == "" {
@@ -48,7 +48,7 @@ func Init(accessKey, secretKey, endpoint string) (*SES, error) {
 }
 
 func (ses *SES) sendMail(from, to, subject, body, format string) (string, error) {
-  	data := make(url.Values)
+	data := make(url.Values)
 	data.Add("Action", "SendEmail")
 	data.Add("Source", from)
 	data.Add("Destination.ToAddresses.member.1", to)
